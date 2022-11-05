@@ -1,5 +1,52 @@
-let name = "null"
-let password = "null"
+var name = "null"
+var password = "null"
+
+
+async function readLogin() {
+    username = document.getElementById("username").value;
+    password = document.getElementById("password").value;
+    //password = stringToHash(password);
+
+    const response = await fetch('http://127.0.0.1:5000/student', {
+            method: 'PASS', 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username, password})})
+            const data = await response.text();
+            document.getElementById("gradebook").innerHTML = data;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 async function addStudent() {
         name = document.getElementById("student-name").value;
