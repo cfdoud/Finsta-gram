@@ -3,7 +3,7 @@ import json
 from sqlalchemy import create_engine, MetaData, Column, Table, Integer, String
 
 # owo
-
+#uwu
 app = Flask(__name__)
 students_engine = create_engine('sqlite:///students.db', echo = True)
 #classes_engine = create_engine('sqlite:///classes.db', echo = True)
