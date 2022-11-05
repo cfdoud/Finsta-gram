@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 import json
 from sqlalchemy import create_engine, MetaData, Column, Table, Integer, String
 # Test 3
-# o
 #uwu
 app = Flask(__name__)
 students_engine = create_engine('sqlite:///students.db', echo = True)
