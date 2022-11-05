@@ -17,7 +17,7 @@ students = Table(
    Column('classes', String), 
    Column('permission', Integer), 
    Column('username', String), 
-   Column('password', String), 
+   Column('password', Integer), 
 )
 #classes = Table(
 #   'students', classes_meta, 
@@ -39,18 +39,22 @@ def home():
 def studPull():
     student_connection = students_engine.connect()
     if (request.method == 'PASS'):
+        print('test')
         added = request.data
         added = added.decode()
         added = json.loads(added)
         addedU = str(added['username'])
-        addedP = str(added['password'])
+        addedP = added['password']
         print(addedU)
 
         #s = students.select(students.c.password).where(students.c.username.equals(addedU))
         s = "SELECT password FROM students WHERE username='" + addedU + "'"
         result = student_connection.execute(s)
         row = str(result.fetchone())
-        row = row[2:-3]
+        print(row)
+        row = row[1:-2]
+        print("table: " + str(row) + ", given: " + str(addedP))
+        row = int(row)
         student_connection.close() 
         if (addedP == row): return "true"
         else: return "false"
