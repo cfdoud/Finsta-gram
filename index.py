@@ -6,25 +6,31 @@ from sqlalchemy import create_engine, MetaData, Column, Table, Integer, String
 
 app = Flask(__name__)
 students_engine = create_engine('sqlite:///students.db', echo = True)
-classes_engine = create_engine('sqlite:///classes.db', echo = True)
+#classes_engine = create_engine('sqlite:///classes.db', echo = True)
 students_meta = MetaData()
-classes_meta = MetaData()
+#classes_meta = MetaData()
 
 
 students = Table(
    'students', students_meta, 
    Column('id', Integer, primary_key = True), 
    Column('name', String), 
-   Column('grade', Integer), 
+   Column('classes', String), 
+   Column('permission', Integer), 
+   Column('username', String), 
+   Column('password', String), 
 )
-classes = Table(
-   'students', classes_meta, 
-   Column('id', Integer, primary_key = True), 
-   Column('name', String), 
-   Column('grade', Integer), 
-)
+#classes = Table(
+#   'students', classes_meta, 
+#   Column('id', Integer, primary_key = True), 
+#   Column('name', String), 
+#   Column('grade', Integer), 
+#)
 students_meta.create_all(students_engine)
-classes_meta.create_all(classes_engine)
+#  classes_meta.create_all(classes_engine)
+student_connection = students_engine.connect()
+ins = students.insert().values(name = 'John', classes='{(Python 1, 98%), (Math 1, 85%)}', permission=0, username = "dog", password = "cat")
+result = student_connection.execute(ins)
 
 
 
@@ -33,6 +39,31 @@ classes_meta.create_all(classes_engine)
 def home():
     return render_template('index.html')
 
+@app.route('/student', methods = ['PASS'])
+def studPull():
+    student_connection = students_engine.connect()
+    if (request.method == 'PASS'):
+        added = request.data
+        added = added.decode()
+        added = json.loads(added)
+        addedU = str(added['username'])
+        addedP = int(added['password'])
+
+        s = students.select().where(students.c.username == addedU)
+        result = student_connection.execute(s)
+
+        added = '{"' + addedN + '": "' + addedG + '"}'
+        added = json.loads(added)
+
+        ins = students.insert().values(name = addedN, grade = addedG)
+        conn.execute(ins)
+        conn.close()
+        return added
+
+
+
+
+"""
 @app.route('/data/<student>', methods = ['GET', 'DELETE', 'PUT'])
 def studPull(student):
     conn = engine.connect()
@@ -93,7 +124,7 @@ def genPull():
         conn.execute(ins)
         conn.close()
         return added
-    
+"""
 
 if __name__ == '__main__':
     app.run()
