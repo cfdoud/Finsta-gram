@@ -27,9 +27,6 @@ students = Table(
 #)
 students_meta.create_all(students_engine)
 #  classes_meta.create_all(classes_engine)
-student_connection = students_engine.connect()
-ins = students.insert().values(name = 'John', classes='{(Python 1, 98%), (Math 1, 85%)}', permission=0, username = "dog", password = "cat")
-result = student_connection.execute(ins)
 
 
 
@@ -46,17 +43,17 @@ def studPull():
         added = added.decode()
         added = json.loads(added)
         addedU = str(added['username'])
-        addedP = int(added['password'])
+        addedP = str(added['password'])
+        print(addedU)
 
-        s = students.select().where(students.c.username == addedU)
+        #s = students.select(students.c.password).where(students.c.username.equals(addedU))
+        s = "SELECT password FROM students WHERE username='" + addedU + "'"
         result = student_connection.execute(s)
-
-        added = json.loads(added)
-
-        ins = students.insert().values(name = addedN, grade = addedG)
-        conn.execute(ins)
-        conn.close()
-        return added
+        row = str(result.fetchone())
+        row = row[2:-3]
+        student_connection.close() 
+        if (addedP == row): return "true"
+        else: return "false"
 
 
 
