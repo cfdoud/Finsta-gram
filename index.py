@@ -74,7 +74,6 @@ def studPassPull():
             student_connection.close() 
             return "Incorrect password"
     if (request.method == 'LOGOUT'):
-        print("test")
         session['user'] = "null"
         return render_template('index.html')
 
@@ -82,10 +81,9 @@ def studPassPull():
 @app.route('/student/<username>', methods = ['GET'])
 def studPull(username):
     if (request.method == 'GET'):
-        print ("curr: " + session['user'])
-        print("username: " + username)
+        print("current user: " + session['user'])
+        print("attempted user: " + username)
         if (session['user'] == username):
-            print('test')
             return render_template('stud.html')
         else: return redirect("http://127.0.0.1:5000/")
 
