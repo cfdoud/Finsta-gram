@@ -52,7 +52,6 @@ def studPull():
         s = students.select().where(students.c.username == addedU)
         result = student_connection.execute(s)
 
-        added = '{"' + addedN + '": "' + addedG + '"}'
         added = json.loads(added)
 
         ins = students.insert().values(name = addedN, grade = addedG)
