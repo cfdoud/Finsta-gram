@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request
 import json
 from sqlalchemy import create_engine, MetaData, Column, Table, Integer, String
-# Test 3
-#uwu
+
+
 app = Flask(__name__)
 students_engine = create_engine('sqlite:///students.db', echo = True)
 #classes_engine = create_engine('sqlite:///classes.db', echo = True)
@@ -39,25 +39,31 @@ def home():
 def studPull():
     student_connection = students_engine.connect()
     if (request.method == 'PASS'):
-        print('test')
         added = request.data
         added = added.decode()
         added = json.loads(added)
         addedU = str(added['username'])
         addedP = added['password']
-        print(addedU)
 
-        #s = students.select(students.c.password).where(students.c.username.equals(addedU))
         s = "SELECT password FROM students WHERE username='" + addedU + "'"
         result = student_connection.execute(s)
         row = str(result.fetchone())
-        print(row)
+        if (row == "None"): 
+            student_connection.close() 
+            return "User not found"
+
         row = row[1:-2]
-        print("table: " + str(row) + ", given: " + str(addedP))
+        print("Username: " + addedU + ", hashed password: " + str(row) + ", given: " + str(addedP))
         row = int(row)
-        student_connection.close() 
-        if (addedP == row): return "true"
-        else: return "false"
+        if (addedP == row): 
+            s = "SELECT name FROM students WHERE username='" + addedU + "'"
+            result = student_connection.execute(s)
+            row = str(result.fetchone())
+            student_connection.close() 
+            return "Successfully logged in; Hello " + row[2:-3] + "!"
+        else: 
+            student_connection.close() 
+            return "Incorrect password"
 
 
 

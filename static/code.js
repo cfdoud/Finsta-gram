@@ -19,7 +19,6 @@ function hash(str) {
 async function readLogin() {
     username = document.getElementById("username").value;
     password = document.getElementById("password").value;
-    print('test');
     password = hash(password);
     
     
