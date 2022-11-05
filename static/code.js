@@ -1,6 +1,3 @@
-var name = "null"
-var password = "null"
-
 function hash(str) {
     let seed = 69420727;
     let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
@@ -21,20 +18,25 @@ async function readLogin() {
     password = document.getElementById("password").value;
     password = hash(password);
     
-    
 
     const response = await fetch('http://127.0.0.1:5000/student', {
-            method: 'PASS', 
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({username, password})})
-            const data = await response.text();
-            document.getElementById("gradebook").innerHTML = data;
+        method: 'PASS', 
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({username, password})})
+    
+    const data = await response.text();
+    document.getElementById("gradebook").innerHTML = data;
+
+    if (data.charAt(0) == 'S') location.href = "student/" + username;
 }
 
-
+async function logOut() {
+    const response = await fetch('http://127.0.0.1:5000/student', {method: 'LOGOUT'})
+    location.href = "http://127.0.0.1:5000/";
+}
 
 
 

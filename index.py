@@ -1,13 +1,16 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect, url_for
 import json
 from sqlalchemy import create_engine, MetaData, Column, Table, Integer, String
 
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 students_engine = create_engine('sqlite:///students.db', echo = True)
-#classes_engine = create_engine('sqlite:///classes.db', echo = True)
+classes_engine = create_engine('sqlite:///classes.db', echo = True)
 students_meta = MetaData()
-#classes_meta = MetaData()
+classes_meta = MetaData()
+
+app.secret_key = "If yall can come up with a better secret key feel free, it's kinda important soooooooooooo"
 
 
 students = Table(
@@ -19,24 +22,28 @@ students = Table(
    Column('username', String), 
    Column('password', Integer), 
 )
-#classes = Table(
-#   'students', classes_meta, 
-#   Column('id', Integer, primary_key = True), 
-#   Column('name', String), 
-#   Column('grade', Integer), 
-#)
+classes = Table(
+   'classes', classes_meta, 
+   Column('id', Integer, primary_key = True), 
+   Column('name', String), 
+   Column('studentCount', Integer),
+   Column('students', String),
+   Column('capacity', Integer),
+   Column('time', String),
+)
 students_meta.create_all(students_engine)
-#  classes_meta.create_all(classes_engine)
-
-
+classes_meta.create_all(classes_engine)
 
 
 @app.route('/')
 def home():
+    session['user'] = "null"
     return render_template('index.html')
 
-@app.route('/student', methods = ['PASS'])
-def studPull():
+
+
+@app.route('/student', methods = ['PASS', 'LOGOUT'])
+def studPassPull():
     student_connection = students_engine.connect()
     if (request.method == 'PASS'):
         added = request.data
@@ -55,18 +62,32 @@ def studPull():
         row = row[1:-2]
         print("Username: " + addedU + ", hashed password: " + str(row) + ", given: " + str(addedP))
         row = int(row)
+
         if (addedP == row): 
             s = "SELECT name FROM students WHERE username='" + addedU + "'"
             result = student_connection.execute(s)
             row = str(result.fetchone())
-            student_connection.close() 
+            student_connection.close()
+            session['user'] = addedU
             return "Successfully logged in; Hello " + row[2:-3] + "!"
         else: 
             student_connection.close() 
             return "Incorrect password"
+    if (request.method == 'LOGOUT'):
+        print("test")
+        session['user'] = "null"
+        return render_template('index.html')
 
 
-
+@app.route('/student/<username>', methods = ['GET'])
+def studPull(username):
+    if (request.method == 'GET'):
+        print ("curr: " + session['user'])
+        print("username: " + username)
+        if (session['user'] == username):
+            print('test')
+            return render_template('stud.html')
+        else: return redirect("http://127.0.0.1:5000/")
 
 """
 @app.route('/data/<student>', methods = ['GET', 'DELETE', 'PUT'])
