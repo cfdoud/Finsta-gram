@@ -1,27 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <script src="{{ url_for('static',filename='code.js') }}"></script>
-        <link rel="stylesheet" href="{{ url_for('static',filename='styles/sheet.css') }}">
-    </head>
-    <body>
+{% extends 'index.html' %}
 
-        <button onclick="getStudents()">Display Refreshed Grades</button>
-        <label class = 'center_label' id="gradebook">Book</label>
-        <label class = 'center_label' id="listedStudent">Student</label>
-        <div>
-            <label>Student Name: </label>
-            <input id="student-name" type="text" />
-        </div>
-        <div>
-            <label>Student Grade: </label>
-            <input id="student-grade" type="text" />
-        </div>
-        
-        <button onclick="addStudent()">Add Student</button>
-        <button onclick="search()">Search</button>
-        <button onclick="editStudent()">Edit Student</button>
-        <button onclick="deleteStudent()">Delete Student</button>
-
-    </body>
-</html>
+{% block content %}
+<label>OwO Admin</label>
+<button onclick="logOut()">Log Out</button>
+{% endblock %}

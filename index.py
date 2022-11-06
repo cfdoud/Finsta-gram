@@ -66,10 +66,15 @@ def studPassPull():
         if (addedP == row): 
             s = "SELECT name FROM students WHERE username='" + addedU + "'"
             result = student_connection.execute(s)
-            row = str(result.fetchone())
+            name = str(result.fetchone())
+            s = "SELECT permission FROM students WHERE username='" + addedU + "'"
+            result = student_connection.execute(s)
+            permission = str(result.fetchone())
             student_connection.close()
             session['user'] = addedU
-            return "Successfully logged in; Hello " + row[2:-3] + "!"
+            session['name'] = name[2:-3]
+            session['permission'] = int(permission[1:-2])
+            return "Successfully logged in; Hello " + session['name'] + "!"
         else: 
             student_connection.close() 
             return "Incorrect password"
@@ -84,6 +89,9 @@ def studPull(username):
         print("current user: " + session['user'])
         print("attempted user: " + username)
         if (session['user'] == username):
+            print("Permission: " + str(session['permission']))
+            if (session['permission'] == 2): return render_template('adm.html')
+            if (session['permission'] == 1): return render_template('teach.html')
             return render_template('stud.html')
         else: return redirect("http://127.0.0.1:5000/")
 
