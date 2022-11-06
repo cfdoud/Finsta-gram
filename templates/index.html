@@ -4,8 +4,9 @@
         <script src="{{ url_for('static',filename='code.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static',filename='styles/sheet.css') }}">
     </head>
+    {% block content %}
     <body>
-        {% block content %}
+        
         <label class = 'center_label' id="gradebook">Interface</label>
         <div>
             <label>Username: </label>
@@ -17,6 +18,6 @@
         </div>
         
         <button onclick="readLogin()">Log In</button>
-        {% endblock %}
     </body>
+    {% endblock %}
 </html>

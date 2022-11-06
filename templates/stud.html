@@ -1,6 +1,15 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<label>OwO Student</label>
-<button onclick="logOut()">Log Out</button>
+<body onload="javascript:SomeFunction()">
+    <table id="myTable">
+        <tr>
+            <th>Course</th>
+            <th>Time</th>
+            <th>Professor</th>
+            <th>Grade</th>
+        </tr>
+    </table>
+    <button onclick="logOut()">Log Out</button>
+</body>
 {% endblock %}

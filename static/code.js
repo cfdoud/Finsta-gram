@@ -1,3 +1,5 @@
+//Logging in/Session Management
+
 function hash(str) {
     let seed = 69420727;
     let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
@@ -37,6 +39,17 @@ async function logOut() {
     const response = await fetch('http://127.0.0.1:5000/student', {method: 'LOGOUT'})
     location.href = "http://127.0.0.1:5000/";
 }
+
+
+// Table Fillers
+
+async function fillTable() {
+    const response = await fetch('http://127.0.0.1:5000/student', { method: 'CLASSES',})
+
+    const data = await response.text();
+    document.getElementById("gradebook").innerHTML = data;
+}
+
 
 
 

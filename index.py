@@ -30,6 +30,7 @@ classes = Table(
    Column('students', String),
    Column('capacity', Integer),
    Column('time', String),
+   Column('professor', String)
 )
 students_meta.create_all(students_engine)
 classes_meta.create_all(classes_engine)
@@ -42,10 +43,10 @@ def home():
 
 
 
-@app.route('/student', methods = ['PASS', 'LOGOUT'])
+@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES'])
 def studPassPull():
-    student_connection = students_engine.connect()
     if (request.method == 'PASS'):
+        student_connection = students_engine.connect()
         added = request.data
         added = added.decode()
         added = json.loads(added)
@@ -81,6 +82,12 @@ def studPassPull():
     if (request.method == 'LOGOUT'):
         session['user'] = "null"
         return render_template('index.html')
+    if (request.method == 'CLASSES'):
+        student_connection = students_engine.connect()
+        s = "SELECT classes FROM students WHERE username='" + addedU + "'"
+        result = student_connection.execute(s)
+        classes = str(result.fetchone())
+        classjson = json.loads(classes)
 
 
 @app.route('/student/<username>', methods = ['GET'])
