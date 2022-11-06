@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 import json
 from sqlalchemy import create_engine, MetaData, Column, Table, Integer, String
 
@@ -84,10 +84,23 @@ def studPassPull():
         return render_template('index.html')
     if (request.method == 'CLASSES'):
         student_connection = students_engine.connect()
-        s = "SELECT classes FROM students WHERE username='" + addedU + "'"
+        s = "SELECT classes FROM students WHERE username='" + session['user'] + "'"
         result = student_connection.execute(s)
         classes = str(result.fetchone())
+        classes = classes[2:-3]
+        print(classes)
         classjson = json.loads(classes)
+        student_connection.close()
+        returnedjson = '{"Classes": ['
+        classes_connection = classes_engine.connect()
+        for takenclass in classjson:
+            s = "SELECT * FROM classes WHERE name='" + takenclass + "'"
+            result = classes_connection.execute(s)
+            result = result.fetchone()
+            returnedjson += str(jsonify(dict(results=result)))
+        print(returnedjson)
+        classes_connection.close()
+        return returnedjson
 
 
 @app.route('/student/<username>', methods = ['GET'])
