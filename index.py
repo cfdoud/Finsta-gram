@@ -8,8 +8,10 @@ app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 students_engine = create_engine('sqlite:///students.db', echo = True)
 classes_engine = create_engine('sqlite:///classes.db', echo = True)
+junction_engine = create_engine('sqlite:///junction.db', echo = True)
 students_meta = MetaData()
 classes_meta = MetaData()
+junction_meta = MetaData()
 
 app.secret_key = "If yall can come up with a better secret key feel free, it's kinda important soooooooooooo"
 
@@ -17,8 +19,7 @@ app.secret_key = "If yall can come up with a better secret key feel free, it's k
 students = Table(
    'students', students_meta, 
    Column('id', Integer, primary_key = True), 
-   Column('name', String), 
-   Column('classes', String), 
+   Column('name', String),
    Column('permission', Integer), 
    Column('username', String), 
    Column('password', Integer), 
@@ -28,13 +29,20 @@ classes = Table(
    Column('id', Integer, primary_key = True), 
    Column('name', String), 
    Column('studentCount', Integer),
-   Column('students', String),
    Column('capacity', Integer),
    Column('time', String),
    Column('professor', String)
 )
+junction = Table(
+   'classes', junction_meta, 
+   Column('id', Integer, primary_key = True), 
+   Column('student', Integer), 
+   Column('class', Integer),
+   Column('grade', Integer),
+)
 students_meta.create_all(students_engine)
 classes_meta.create_all(classes_engine)
+junction_meta.create_all(junction_engine)
 
 
 @app.route('/')
