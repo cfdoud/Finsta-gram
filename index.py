@@ -105,12 +105,23 @@ def studPassPull():
             print(string)
             string = string[string.index(',')+3:]
             string = string[string.index(',')+2:]
-            returnedjson += string[:string.index(',')] + ': ' + string[string.index(',')+2:-1] + ', '
-        returnedjson = returnedjson[:-1] + "}"
+            returnedjson += '"' + string[:string.index(',')] + '": "' + string[string.index(',')+2:-1] + '", '
+        returnedjson = returnedjson[:-2] + "}"
         print(returnedjson)
+        junction_connection.close() 
 
+        returnedjson = json.loads(returnedjson)
+        classes_connection = classes_engine.connect()
+        finaljson = '{'
 
-        return returnedjson
+        for key in returnedjson:
+            s = "SELECT * FROM classes WHERE id='" + key + "'"
+            result = classes_connection.execute(s)
+            finaljson += '"' + str(result.fetchone()) + '": "'  + returnedjson[key] + '", '
+        finaljson = finaljson[:-2] + "}"
+        classes_connection.close()
+        print(finaljson)
+        return finaljson
 
 
 @app.route('/student/<username>', methods = ['GET'])
