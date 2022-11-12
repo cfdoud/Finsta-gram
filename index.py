@@ -106,6 +106,7 @@ def studPassPull():
             string = string[string.index(',')+3:]
             string = string[string.index(',')+2:]
             returnedjson += string[:string.index(',')] + ': ' + string[string.index(',')+2:-1] + ', '
+        returnedjson = returnedjson[:-1] + "}"
         print(returnedjson)
 
 
