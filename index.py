@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, j
 import json
 from sqlalchemy import create_engine, MetaData, Column, Table, Integer, String
 
+#comment
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
