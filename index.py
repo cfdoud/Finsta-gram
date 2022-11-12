@@ -34,7 +34,7 @@ classes = Table(
    Column('professor', String)
 )
 junction = Table(
-   'classes', junction_meta, 
+   'junction', junction_meta, 
    Column('id', Integer, primary_key = True), 
    Column('student', Integer), 
    Column('class', Integer),
@@ -80,10 +80,14 @@ def studPassPull():
             s = "SELECT permission FROM students WHERE username='" + addedU + "'"
             result = student_connection.execute(s)
             permission = str(result.fetchone())
+            s = "SELECT id FROM students WHERE username='" + addedU + "'"
+            result = student_connection.execute(s)
+            id = str(result.fetchone())
             student_connection.close()
             session['user'] = addedU
             session['name'] = name[2:-3]
             session['permission'] = int(permission[1:-2])
+            session['id'] = int(id[1: -2])
             return "Successfully logged in; Hello " + session['name'] + "!"
         else: 
             student_connection.close() 
@@ -92,23 +96,19 @@ def studPassPull():
         session['user'] = "null"
         return render_template('index.html')
     if (request.method == 'CLASSES'):
-        student_connection = students_engine.connect()
-        s = "SELECT classes FROM students WHERE username='" + session['user'] + "'"
-        result = student_connection.execute(s)
-        classes = str(result.fetchone())
-        classes = classes[2:-3]
-        print(classes)
-        classjson = json.loads(classes)
-        student_connection.close()
-        returnedjson = '{"Classes": ['
-        classes_connection = classes_engine.connect()
-        for takenclass in classjson:
-            s = "SELECT * FROM classes WHERE name='" + takenclass + "'"
-            result = classes_connection.execute(s)
-            result = result.fetchone()
-            returnedjson += str(jsonify(dict(results=result)))
+        junction_connection = junction_engine.connect()
+        s = "SELECT * FROM junction WHERE student='" + str(session['id']) + "'"
+        result = junction_connection.execute(s)
+        returnedjson = '{'
+        for row in result:
+            string = str(row)
+            print(string)
+            string = string[string.index(',')+3:]
+            string = string[string.index(',')+2:]
+            returnedjson += string[:string.index(',')] + ': ' + string[string.index(',')+2:-1] + ', '
         print(returnedjson)
-        classes_connection.close()
+
+
         return returnedjson
 
 
