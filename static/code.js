@@ -27,7 +27,7 @@ async function readLogin() {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({username, password})})
+        body: JSON.stringify({username, password})});
     
     const data = await response.text();
     document.getElementById("gradebook").innerHTML = data;
@@ -36,7 +36,7 @@ async function readLogin() {
 }
 
 async function logOut() {
-    const response = await fetch('http://127.0.0.1:5000/student', {method: 'LOGOUT'})
+    const response = await fetch('http://127.0.0.1:5000/student', {method: 'LOGOUT'});
     location.href = "http://127.0.0.1:5000/";
 }
 
@@ -44,10 +44,34 @@ async function logOut() {
 // Table Fillers
 
 async function fillTable() {
-    const response = await fetch('http://127.0.0.1:5000/student', { method: 'CLASSES',})
+    const response = await fetch('http://127.0.0.1:5000/student', { method: 'CLASSES',});
+    var data = await response.text();
 
-    const data = await response.text();
-    document.getElementById("gradebook").innerHTML = data;
+    data = data.substring(data.indexOf("'") + 1);
+    var table = document.getElementById("myTable");
+    while(true) {
+        var newRow = table.insertRow(table.length);
+        var cell1 = newRow.insertCell(table.length);
+        var cell2 = newRow.insertCell(table.length);
+        var cell3 = newRow.insertCell(table.length);
+        var cell4 = newRow.insertCell(table.length);
+
+        cell1.innerHTML = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf("'")+1);
+        data = data.substring(data.indexOf("'")+1);
+        cell2.innerHTML = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf("'")+1);
+        data = data.substring(data.indexOf("'")+1);
+        cell3.innerHTML = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf('"')+1);
+        data = data.substring(data.indexOf('"')+1);
+        cell4.innerHTML = data.substring(0, data.indexOf('"')) + '%';
+        data = data.substring(data.indexOf('"')+1);
+
+        
+        if (data.indexOf("'") == -1) break;
+        data = data.substring(data.indexOf("'") + 1);
+    }
 }
 
 
