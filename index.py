@@ -58,7 +58,7 @@ def home():
 
 # This is where requests to /student are handled, PASS is used to authenticate users, LOGOUT to log the user out, CLASSES to pull class information for the current user
 # and GET as what happens when you manually type the URL in.
-@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES', 'GET', 'ADD', 'DROP'])
+@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES', 'ALLCLASSES', 'GET', 'ADD', 'DROP', 'GETNAME'])
 def studPassPull():
     if (request.method == 'PASS'):
         # Initializes connection to the students database
@@ -181,18 +181,34 @@ def studPassPull():
     if (request.method == 'DROP'):
         # Initializes connection to the junction database
         junction_connection = junction_engine.connect()
+        classes_connection = classes_engine.connect()
         
         removed = request.data
         removed = removed.decode()
         removed = json.loads(removed)
         removedClass = removed['classID']
         removedStud = removed['studentID']
+
+        s = "SELECT studentCount FROM classes WHERE id='" + str(removedClass) + "'"
+        result = classes_connection.execute(s)
+        studCount = str(result.fetchone())[1:-2]
+        studCount = int(studCount) - 1
+
+        s = classes.update().where(classes.c.id == removedClass).values(studentCount = studCount)
+        result = classes_connection.execute(s)
+
+
         if (removedStud == -1): s = "DELETE FROM junction WHERE student='" + str(session['id']) + "' AND class='" + str(removedClass) + "'"
         else: s = "DELETE FROM junction WHERE student='" + str(removedStud) + "' AND class='" + str(removedClass) + "'"
         result = junction_connection.execute(s)
+        junction_connection.close()
+
+
         return("owo")
     if (request.method == 'ADD'):
         junction_connection = junction_engine.connect()
+        classes_connection = classes_engine.connect()
+        print("test")
         
         added = request.data
         added = added.decode()
@@ -201,14 +217,44 @@ def studPassPull():
         addedGrade = added['grade']
         addedStud = added['studentID']
 
+        s = "SELECT studentCount FROM classes WHERE id='" + str(addedClass) + "'"
+        result = classes_connection.execute(s)
+        studCount = str(result.fetchone())[1:-2]
+        studCount = int(studCount) + 1
+
+        s = classes.update().where(classes.c.id == addedClass).values(studentCount = studCount)
+        result = classes_connection.execute(s)
+
         if (addedStud == -1): s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(session['id']) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
         else: s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(addedStud) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
         result = junction_connection.execute(s)
+        junction_connection.close()
         return("owo")
+    if (request.method == 'ALLCLASSES'):
+        classes_connection = classes_engine.connect()
+        junction_connection = junction_engine.connect()
+        s = "SELECT * FROM classes"
+        result = classes_connection.execute(s)
+
+        returnedString = "{"
+        for row in result:
+            string = str(row)
+            string = string[1:string.index(',')]
+            t = "SELECT * FROM junction WHERE student='" + str(session['id']) + "' AND class='" + string + "'"
+            t = junction_connection.execute(t)
+            t = str(t.fetchone())
+            if (t == 'None'): returnedString += '"' + str(row) + '": "Not Enrolled", '
+            else: returnedString += '"' + str(row) + '": "Enrolled", '
+        returnedString = returnedString[:-2] + "}"
+        return returnedString
+    if (request.method == 'GETNAME'):
+        print("test: " + str(session['name']))
+        return session['name']
+        
 
 
 # This is where requests for data for a specific student is handled, you can only 'GET' from here
-@app.route('/student/<username>', methods = ['GET', 'GETNAME'])
+@app.route('/student/<username>', methods = ['GET'])
 def studPull(username):
     if (request.method == 'GET'):
         print("current user: " + session['user'])
@@ -220,8 +266,6 @@ def studPull(username):
             if (session['permission'] == 1): return render_template('teach.html')
             return render_template('stud.html')
         else: return redirect("http://127.0.0.1:5000/")
-    if (request.method == 'GETNAME'):
-        return (session['name'])
 
 # Start the app
 if __name__ == '__main__':

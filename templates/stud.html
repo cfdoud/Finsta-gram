@@ -2,8 +2,7 @@
 
 {% block content %}
 
-<h1>Welcome, </h1>
-<p id="name"></p>
+<h1>Welcome, <label id="name">name</label></h1>
 <h2 class = "titleCenter">University</h2>
 <div class="tab">
     <button class="tablinks" onclick="openCatalog(event, 'yourClasses')">Your Classes</button>
@@ -13,12 +12,13 @@
 <div id = "yourClasses" class="tabcontent">
     <h3>Your Classes</h3>
     <p>
-    <body onload="javascript:fillTableCurrClasses()">
+    <body onload="javascript:initialize()">
         <table id="myTable" class = "center"></table>
         <button onclick="logOut()">Log Out</button>
         <button onclick="addClass(-1, 1, 35)">add</button>
         <button onclick="dropClass(-1, 1)">remove</button>
-    </body>
+        <button onclick="fillTableAllClasses('myTable')">showAll</button>
+</body>
     </p>
 </div>
 
