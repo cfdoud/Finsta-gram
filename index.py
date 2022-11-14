@@ -10,20 +10,6 @@ from flask_admin.contrib.sqla import ModelView
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.secret_key = "If yall can come up with a better secret key feel free, it's kinda important soooooooooooo"
-admin = Admin(app)
-
-
-
-class MyView(BaseView):
-    @expose('/')
-    def index(self):
-        return self.render('index.html')
-
-app = Flask(__name__)
-
-admin = Admin(app)
-admin.add_view(MyView(name='Hello'))
-
 
 
 
@@ -65,7 +51,7 @@ junction_meta.create_all(junction_engine)
 
 
 
-admin.add_view(ModelView(students, students.session))
+#admin.add_view(ModelView(students, students.session))
 
 
 # App responses to connections at various URLs
