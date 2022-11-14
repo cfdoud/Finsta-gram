@@ -5,15 +5,10 @@
 
 <heading class = "titleCenter">University</heading>
 
-<body onload="javascript:fillTable()">
-    <table id="myTable" class = "center">
-        <tr>
-            <th>Course</th>
-            <th>Time</th>
-            <th>Professor</th>
-            <th>Grade</th>
-        </tr>
-    </table>
+<body onload="javascript:fillTableCurrClasses()">
+    <table id="myTable" class = "center"></table>
     <button onclick="logOut()">Log Out</button>
+    <button onclick="addClass(-1, 1, 35)">add</button>
+    <button onclick="dropClass(-1, 1)">remove</button>
 </body>
 {% endblock %}

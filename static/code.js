@@ -55,13 +55,26 @@ async function logOut() {
 // Table Fillers
 
 // This function is automatically called in pages where it is relevant, it fills a matching table ("myTable") with the class information for the current user
-async function fillTable() {
+async function fillTableCurrClasses() {
     // Calls CLASSES function in /student as seen in index.py, resultant information is saved in data
     const response = await fetch('http://127.0.0.1:5000/student', { method: 'CLASSES',});
     var data = await response.text();
 
     // Creates variable table connected to "myTable" in the html
     var table = document.getElementById("myTable");
+
+    table.innerHTML = "";
+
+    var newRow = table.insertRow(table.length);
+    var cell1 = newRow.insertCell(table.length);
+    var cell2 = newRow.insertCell(table.length);
+    var cell3 = newRow.insertCell(table.length);
+    var cell4 = newRow.insertCell(table.length);
+
+    cell1.innerHTML = "Course";
+    cell2.innerHTML = "Time";
+    cell3.innerHTML = "Professor";
+    cell4.innerHTML = "Grade";
 
     // Cuts data to begin at the start of the relevant information
     data = data.substring(data.indexOf("'") + 1);
@@ -99,86 +112,28 @@ async function fillTable() {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function addStudent() {
-        name = document.getElementById("student-name").value;
-        grade = document.getElementById("student-grade").value;
-
-        const response = await fetch('http://127.0.0.1:5000/data', {
-            method: 'POST', 
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({name, grade})})
-            const data = await response.text();
-            document.getElementById("gradebook").innerHTML = data;
-}
-
-async function editStudent() {
-    name = document.getElementById("student-name").value;
-    grade = Number(document.getElementById("student-grade").value);
-    name.replaceAll(' ', '%20');
-
-    const response = await fetch('http://127.0.0.1:5000/data/' + name, {
-        method: 'PUT', 
+async function addClass(studentID, classID, grade) {
+    const response = await fetch('http://127.0.0.1:5000/student', {
+        method: 'ADD', 
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({"grade": grade})})
-        const data = await response.text();
-        document.getElementById("gradebook").innerHTML = data;
-        search();
-}
-
-async function deleteStudent() {
-    name = document.getElementById("student-name").value;
-    name.replaceAll(' ', '%20');
-
-    const response = await fetch('http://127.0.0.1:5000/data/' + name, {method: 'DELETE',})
-        const data = await response.text();
-        document.getElementById("gradebook").innerHTML = data;
-}
-
-async function getStudents() {
-    const response = await fetch('http://127.0.0.1:5000/data', {method: 'GET', });
+        body: JSON.stringify({studentID, classID, grade})});
     const data = await response.text();
-    document.getElementById("gradebook").innerHTML = data;
+
+    fillTableCurrClasses();
 }
 
-async function search() {
-    student = document.getElementById("student-name").value;
-    student.replaceAll(' ', '%20');
-    const response = await fetch('http://127.0.0.1:5000/data/' + student, {method: 'GET', });
+async function dropClass(studentID, classID) {
+    const response = await fetch('http://127.0.0.1:5000/student', {
+        method: 'DROP', 
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({studentID, classID})});
     const data = await response.text();
-    document.getElementById("listedStudent").innerHTML = data;
+
+    fillTableCurrClasses();
 }

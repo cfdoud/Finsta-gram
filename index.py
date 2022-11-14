@@ -58,7 +58,7 @@ def home():
 
 # This is where requests to /student are handled, PASS is used to authenticate users, LOGOUT to log the user out, CLASSES to pull class information for the current user
 # and GET as what happens when you manually type the URL in.
-@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES', 'GET'])
+@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES', 'GET', 'ADD', 'DROP'])
 def studPassPull():
     if (request.method == 'PASS'):
         # Initializes connection to the students database
@@ -178,6 +178,33 @@ def studPassPull():
 
         # Return class information
         return finaljson
+    if (request.method == 'DROP'):
+        # Initializes connection to the junction database
+        junction_connection = junction_engine.connect()
+        
+        removed = request.data
+        removed = removed.decode()
+        removed = json.loads(removed)
+        removedClass = removed['classID']
+        removedStud = removed['studentID']
+        if (removedStud == -1): s = "DELETE FROM junction WHERE student='" + str(session['id']) + "' AND class='" + str(removedClass) + "'"
+        else: s = "DELETE FROM junction WHERE student='" + str(removedStud) + "' AND class='" + str(removedClass) + "'"
+        result = junction_connection.execute(s)
+        return("owo")
+    if (request.method == 'ADD'):
+        junction_connection = junction_engine.connect()
+        
+        added = request.data
+        added = added.decode()
+        added = json.loads(added)
+        addedClass = added['classID']
+        addedGrade = added['grade']
+        addedStud = added['studentID']
+
+        if (addedStud == -1): s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(session['id']) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
+        else: s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(addedStud) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
+        result = junction_connection.execute(s)
+        return("owo")
 
 
 # This is where requests for data for a specific student is handled, you can only 'GET' from here
