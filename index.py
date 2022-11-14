@@ -243,8 +243,8 @@ def studPassPull():
             t = "SELECT * FROM junction WHERE student='" + str(session['id']) + "' AND class='" + string + "'"
             t = junction_connection.execute(t)
             t = str(t.fetchone())
-            if (t == 'None'): returnedString += str(row) + ": false, "
-            else: returnedString += str(row) + ": true, "
+            if (t == 'None'): returnedString += '"' + str(row) + '": "Not Enrolled", '
+            else: returnedString += '"' + str(row) + '": "Enrolled", '
         returnedString = returnedString[:-2] + "}"
         return returnedString
     if (request.method == 'GETNAME'):

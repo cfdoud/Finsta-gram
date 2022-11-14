@@ -84,9 +84,9 @@ async function fillTableCurrClasses() {
     var cell4 = newRow.insertCell(table.length);
 
     cell1.innerHTML = "Course";
-    cell2.innerHTML = "Time";
-    cell3.innerHTML = "Professor";
-    cell4.innerHTML = "Grade";
+    cell2.innerHTML = "Professor";
+    cell3.innerHTML = "Time";
+    cell4.innerHTML = "Students Enrolled";
 
     // Cuts data to begin at the start of the relevant information
     data = data.substring(data.indexOf("'") + 1);
@@ -99,28 +99,26 @@ async function fillTableCurrClasses() {
         var cell3 = newRow.insertCell(table.length);
         var cell4 = newRow.insertCell(table.length);
 
-        
+        var courseName = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf(",")+2);
+        var studCount = data.substring(0, data.indexOf(","));
+        data = data.substring(data.indexOf(",")+2);
+        var studCapacity = data.substring(0, data.indexOf(","));
+        data = data.substring(data.indexOf("'")+1);
+        var time = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf(",")+3);
+        var professor = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf(":") + 3);
+        var grade = data.substring(0, data.indexOf('"')) + "%";
 
-        // Reads information in single quotes, assuming starting at relevant information, assigns to cell1
-        cell1.innerHTML = data.substring(0, data.indexOf("'"));
-        // Tabs to next relevant information
-        data = data.substring(data.indexOf("'")+1);
-        data = data.substring(data.indexOf("'")+1);
-        // Reads information in nearest single quotes, assuming starting at relevant information, assigns to cell2
-        cell2.innerHTML = data.substring(0, data.indexOf("'"));
-        // Tabs to next relevant information
-        data = data.substring(data.indexOf("'")+1);
-        data = data.substring(data.indexOf("'")+1);
-        // Reads information in nearest single quotes, assuming starting at relevant information, assigns to cell3
-        cell3.innerHTML = data.substring(0, data.indexOf("'"));
-        // Tabs to next relevant information
-        data = data.substring(data.indexOf('"')+1);
-        data = data.substring(data.indexOf('"')+1);
-        // Reads information in nearest double quotes, assuming starting at relevant information, assigns to cell4
-        cell4.innerHTML = data.substring(0, data.indexOf('"')) + '%';
 
-        // If there is no more information, break the loop and finish
-        if (data.indexOf("'") == -1) break;
+        cell1.innerHTML = courseName;
+        cell2.innerHTML = professor;
+        cell3.innerHTML = time;
+        cell4.innerHTML = studCount + "/" + studCapacity;
+
+
+        if (data.indexOf("(") == -1) break;
         // Tab to next relevant information
         data = data.substring(data.indexOf("'") + 1);
     }
@@ -130,7 +128,57 @@ async function fillTableAllClasses() {
     const response = await fetch('http://127.0.0.1:5000/student', { method: 'ALLCLASSES',});
     var data = await response.text();
 
-    document.getElementById("testLabel").innerHTML = data;
+    var table = document.getElementById("myTable");
+
+    table.innerHTML = "";
+
+    var newRow = table.insertRow(table.length);
+    var cell1 = newRow.insertCell(table.length);
+    var cell2 = newRow.insertCell(table.length);
+    var cell3 = newRow.insertCell(table.length);
+    var cell4 = newRow.insertCell(table.length);
+
+    cell1.innerHTML = "Course";
+    cell2.innerHTML = "Professor";
+    cell3.innerHTML = "Time";
+    cell4.innerHTML = "Students Enrolled";
+
+    // Cuts data to begin at the start of the relevant information
+    data = data.substring(data.indexOf("'") + 1);
+    // Loops through each class until the information is emptied
+    while(true) {
+        // Creates a new row with the cells necessary, appending them to the current table
+        var newRow = table.insertRow(table.length);
+        var cell1 = newRow.insertCell(table.length);
+        var cell2 = newRow.insertCell(table.length);
+        var cell3 = newRow.insertCell(table.length);
+        var cell4 = newRow.insertCell(table.length);
+        var cell5 = newRow.insertCell(table.length);
+
+        var courseName = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf(",")+2);
+        var studCount = data.substring(0, data.indexOf(","));
+        data = data.substring(data.indexOf(",")+2);
+        var studCapacity = data.substring(0, data.indexOf(","));
+        data = data.substring(data.indexOf("'")+1);
+        var time = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf(",")+3);
+        var professor = data.substring(0, data.indexOf("'"));
+        data = data.substring(data.indexOf(":") + 3);
+        var inClass = data.substring(0, data.indexOf('"'));
+
+        
+        cell1.innerHTML = courseName;
+        cell2.innerHTML = professor;
+        cell3.innerHTML = time;
+        cell4.innerHTML = studCount + "/" + studCapacity;
+        cell5.innerHTML = inClass;
+
+
+        if (data.indexOf("(") == -1) break;
+        // Tab to next relevant information
+        data = data.substring(data.indexOf("'") + 1);
+    }
 }
 
 async function addClass(studentID, classID, grade) {
@@ -143,7 +191,7 @@ async function addClass(studentID, classID, grade) {
         body: JSON.stringify({studentID, classID, grade})});
     const data = await response.text();
 
-    fillTableCurrClasses();
+    fillTableAllClasses();
 }
 
 async function dropClass(studentID, classID) {
@@ -156,7 +204,7 @@ async function dropClass(studentID, classID) {
         body: JSON.stringify({studentID, classID})});
     const data = await response.text();
 
-    fillTableCurrClasses();
+    fillTableAllClasses();
 }
 
 async function getName() {
