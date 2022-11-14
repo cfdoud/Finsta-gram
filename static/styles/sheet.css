@@ -3,7 +3,7 @@ button {
     margin-left:auto;
     margin-right:auto;
     text-align: center;
-    background: purple;
+    background: gainsboro;
 }
 .center_label {
     padding:5px;
@@ -28,7 +28,7 @@ div {
 }
 h1{
     text-align: left;
-    color: yellow;
+    color: blue;
 }
 h2 {
     text-align: center;
@@ -42,6 +42,7 @@ div {
     margin-top: auto;
     margin-bottom: auto;
 }
+
 table, td {
     border: 1px solid #ddd
 }
@@ -73,7 +74,7 @@ tr:nth-child(even)  {
 .tab button.active {
     background-color: #ccc;
 }
- .tabcontent {
+.tabcontent {
     display: none;
     padding: 6px 12px;
     border: 1px solid rgb(215, 19, 19);

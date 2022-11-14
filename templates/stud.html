@@ -3,10 +3,11 @@
 {% block content %}
 
 <h1>Welcome, <label id="name">name</label></h1>
-<h2 class = "titleCenter">University</h2>
+<h2 class = "titleCenter">University of California Merced</h2>
 <div class="tab">
     <button class="tablinks" onclick="fillTableCurrClasses('myTable')">Your Classes</button>
-    <button class="tablinks" onclick="fillTableAllClasses('myTable')">Add Classes</button>
+    <button class="tablinks" onclick="fillTableAllClasses('myTable')" style="padding-right: 70%">Add Classes</button>
+    <button class="logout" onclick="logOut()">Log Out</button>
 </div>
 <!--Content for the tabs-->
 <div id = "yourClasses">
@@ -14,7 +15,7 @@
     <p>
     <body onload="javascript:initialize('myTable')">
         <table id="myTable" class = "center"></table>
-        <button onclick="logOut()">Log Out</button>
+        
 </body>
     </p>
 </div>
