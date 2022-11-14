@@ -1,12 +1,31 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 import json
 from sqlalchemy import create_engine, MetaData, Column, Table, Integer, String
+from flask_admin import Admin, BaseView, expose
+from flask_admin.contrib.sqla import ModelView
+
 
 
 # Initializes app
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.secret_key = "If yall can come up with a better secret key feel free, it's kinda important soooooooooooo"
+admin = Admin(app)
+
+
+
+class MyView(BaseView):
+    @expose('/')
+    def index(self):
+        return self.render('index.html')
+
+app = Flask(__name__)
+
+admin = Admin(app)
+admin.add_view(MyView(name='Hello'))
+
+
+
 
 # Initializes databases
 students_engine = create_engine('sqlite:///students.db', echo = True)
@@ -44,6 +63,9 @@ students_meta.create_all(students_engine)
 classes_meta.create_all(classes_engine)
 junction_meta.create_all(junction_engine)
 
+
+
+admin.add_view(ModelView(students, students.session))
 
 
 # App responses to connections at various URLs
@@ -352,6 +374,7 @@ def studPull(username):
             if (session['permission'] == 1): return render_template('teach.html')
             return render_template('stud.html')
         else: return redirect("http://127.0.0.1:5000/")
+
 
 # Start the app
 if __name__ == '__main__':
