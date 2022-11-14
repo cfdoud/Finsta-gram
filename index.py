@@ -181,12 +181,23 @@ def studPassPull():
     if (request.method == 'DROP'):
         # Initializes connection to the junction database
         junction_connection = junction_engine.connect()
+        classes_connection = classes_engine.connect()
         
         removed = request.data
         removed = removed.decode()
         removed = json.loads(removed)
         removedClass = removed['classID']
         removedStud = removed['studentID']
+
+        s = "SELECT studentCount FROM classes WHERE id='" + str(removedClass) + "'"
+        result = classes_connection.execute(s)
+        studCount = str(result.fetchone())[1:-2]
+        studCount = int(studCount) - 1
+
+        s = classes.update().where(classes.c.id == removedClass).values(studentCount = studCount)
+        result = classes_connection.execute(s)
+
+
         if (removedStud == -1): s = "DELETE FROM junction WHERE student='" + str(session['id']) + "' AND class='" + str(removedClass) + "'"
         else: s = "DELETE FROM junction WHERE student='" + str(removedStud) + "' AND class='" + str(removedClass) + "'"
         result = junction_connection.execute(s)
@@ -197,6 +208,7 @@ def studPassPull():
     if (request.method == 'ADD'):
         junction_connection = junction_engine.connect()
         classes_connection = classes_engine.connect()
+        print("test")
         
         added = request.data
         added = added.decode()
@@ -205,9 +217,13 @@ def studPassPull():
         addedGrade = added['grade']
         addedStud = added['studentID']
 
-        s = "SELECT capacity FROM classes WHERE id='" + addedClass + "'"
+        s = "SELECT studentCount FROM classes WHERE id='" + str(addedClass) + "'"
         result = classes_connection.execute(s)
-        print(result)
+        studCount = str(result.fetchone())[1:-2]
+        studCount = int(studCount) + 1
+
+        s = classes.update().where(classes.c.id == addedClass).values(studentCount = studCount)
+        result = classes_connection.execute(s)
 
         if (addedStud == -1): s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(session['id']) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
         else: s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(addedStud) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"

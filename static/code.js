@@ -99,6 +99,8 @@ async function fillTableCurrClasses() {
         var cell3 = newRow.insertCell(table.length);
         var cell4 = newRow.insertCell(table.length);
 
+        
+
         // Reads information in single quotes, assuming starting at relevant information, assigns to cell1
         cell1.innerHTML = data.substring(0, data.indexOf("'"));
         // Tabs to next relevant information
