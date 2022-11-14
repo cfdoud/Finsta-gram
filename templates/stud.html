@@ -2,13 +2,33 @@
 
 {% block content %}
 
-<h1 onload="javascript:getName()">Welcome, </h1>
+<h1>Welcome, </h1>
+<p id="name"></p>
 <h2 class = "titleCenter">University</h2>
+<div class="tab">
+    <button class="tablinks" onclick="openCatalog(event, 'yourClasses')">Your Classes</button>
+    <button class="tablinks" onclick="openCatalog(event, 'addClasses')">Add Classes</button>
+</div>
+<!--Content for the tabs-->
+<div id = "yourClasses" class="tabcontent">
+    <h3>Your Classes</h3>
+    <p>
+    <body onload="javascript:fillTableCurrClasses()">
+        <table id="myTable" class = "center"></table>
+        <button onclick="logOut()">Log Out</button>
+        <button onclick="addClass(-1, 1, 35)">add</button>
+        <button onclick="dropClass(-1, 1)">remove</button>
+    </body>
+    </p>
+</div>
 
-<body onload="javascript:fillTableCurrClasses()">
-    <table id="myTable" class = "center"></table>
-    <button onclick="logOut()">Log Out</button>
-    <button onclick="addClass(-1, 1, 35)">add</button>
-    <button onclick="dropClass(-1, 1)">remove</button>
-</body>
+<div id = "addClasses" class="tabcontent">
+    <h3>Add Classes</h3>
+    <p>
+        <table id="myTable" class = "center"></table>
+        <button onclick="logOut()">Log Out</button>
+        <button onclick="addClass(-1, 1, 35)">add</button>
+        <button onclick="dropClass(-1, 1)">remove</button>
+    </p>
+</div>
 {% endblock %}
