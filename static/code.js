@@ -59,6 +59,10 @@ async function logOut() {
     location.href = "http://127.0.0.1:5000/";
 }
 
+async function initialize() {
+    fillTableCurrClasses();
+    getName();
+}
 
 // Table Fillers
 
@@ -120,7 +124,12 @@ async function fillTableCurrClasses() {
     }
 }
 
+async function fillTableAllClasses() {
+    const response = await fetch('http://127.0.0.1:5000/student', { method: 'ALLCLASSES',});
+    var data = await response.text();
 
+    document.getElementById("testLabel").innerHTML = data;
+}
 
 async function addClass(studentID, classID, grade) {
     const response = await fetch('http://127.0.0.1:5000/student', {
@@ -149,5 +158,10 @@ async function dropClass(studentID, classID) {
 }
 
 async function getName() {
-    return studentName;
+    console.log("Bruh");
+    const response = await fetch('http://127.0.0.1:5000/student', { method: 'GETNAME',});
+    var data = await response.text();
+    console.log(data)
+    document.getElementById("name").innerHTML = data;
+    return data;
 }
