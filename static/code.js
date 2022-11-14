@@ -137,11 +137,13 @@ async function fillTableAllClasses(elementID) {
     var cell2 = newRow.insertCell(table.length);
     var cell3 = newRow.insertCell(table.length);
     var cell4 = newRow.insertCell(table.length);
+    var cell4 = newRow.insertCell(table.length);
 
     cell1.innerHTML = "Course";
     cell2.innerHTML = "Professor";
     cell3.innerHTML = "Time";
     cell4.innerHTML = "Students Enrolled";
+    cell4.innerHTML = "Enrollment Status";
 
     // Cuts data to begin at the start of the relevant information
     data = data.substring(data.indexOf("'") + 1);
