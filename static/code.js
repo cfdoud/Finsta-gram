@@ -219,23 +219,7 @@ async function getName() {
 }
 document.getElementById(evt, "name").innerHTML = getName();
 
-function openCatalog(evt, tabChange)  {
-    var i, tabcontent, tablinks;
 
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for(i = 0; i < tabcontent.length; i++)  {
-        tabcontent[i].style.display = "none";
-    }
-
-    tablinks = document.getElementsByClassName("tablinks");
-    for(i = 0; i < tablinks.length; i++)  {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    document.getElementById(tabChange).style.display = "block";
-    EventTarget.currentTarget.className += " active"
-}
-document.getElementById(evt, "name").innerHTML = getName();
 
 function openCatalog(evt, tabChange)  {
     var i, tabcontent, tablinks;
@@ -251,5 +235,5 @@ function openCatalog(evt, tabChange)  {
     }
 
     document.getElementById(tabChange).style.display = "block";
-    EventTarget.currentTarget.className += " active"
+    EventTarget.currentTarget.className += " active";
 }

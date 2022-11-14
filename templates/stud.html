@@ -12,23 +12,26 @@
 <div id = "yourClasses" class="tabcontent">
     <h3>Your Classes</h3>
     <p>
-    <body onload="javascript:initialize()">
+    <body onload="javascript:initialize('myTable', 'user')">
         <table id="myTable" class = "center"></table>
         <button onclick="logOut()">Log Out</button>
         <button onclick="addClass(-1, 1, 35)">add</button>
         <button onclick="dropClass(-1, 1)">remove</button>
         <button onclick="fillTableAllClasses('myTable')">showAll</button>
-</body>
+    </body>
     </p>
 </div>
 
 <div id = "addClasses" class="tabcontent">
     <h3>Add Classes</h3>
     <p>
-        <table id="myTable" class = "center"></table>
-        <button onclick="logOut()">Log Out</button>
-        <button onclick="addClass(-1, 1, 35)">add</button>
-        <button onclick="dropClass(-1, 1)">remove</button>
+        <body onload="javascript:initialize('myTable', 'all')">
+            <table id="myTable" class = "center"></table>
+            <button onclick="logOut()">Log Out</button>
+            <button onclick="addClass(-1, 1, 35)">add</button>
+            <button onclick="dropClass(-1, 1)">remove</button>
+            <button onclick="fillTableAllClasses('myTable')">showAll</button>
+        </body>
     </p>
 </div>
 {% endblock %}
