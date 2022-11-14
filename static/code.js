@@ -1,4 +1,7 @@
 //Logging in/Session Management
+var username = 'null'
+var password = 'null'
+var studentName = 'null'
 
 // Hashing function, used to obfuscate passwords so they cannot be easily retreived from the database
 function hash(str) {
@@ -40,8 +43,13 @@ async function readLogin() {
     // Sets message on the login page to display result of log-in attempt
     document.getElementById("message").innerHTML = data;
 
+    
+
     // If the log-in was successful, the message will begin with 'S' and you will be redirected to the page for your user (rest seen in /student/username in index.py)
-    if (data.charAt(0) == 'S') location.href = "student/" + username;
+    if (data.charAt(0) == 'S') {
+        studentName = data.substring(data.indexOf("Hello")+1, data.indexOf("!")) 
+        location.href = "student/" + username;
+    }
 }
 
 // Log out function, called when you press Log Out
@@ -112,6 +120,8 @@ async function fillTableCurrClasses() {
     }
 }
 
+
+
 async function addClass(studentID, classID, grade) {
     const response = await fetch('http://127.0.0.1:5000/student', {
         method: 'ADD', 
@@ -136,4 +146,8 @@ async function dropClass(studentID, classID) {
     const data = await response.text();
 
     fillTableCurrClasses();
+}
+
+async function getName() {
+    return studentName;
 }
