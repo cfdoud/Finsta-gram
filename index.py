@@ -187,12 +187,21 @@ def studPassPull():
         removed = json.loads(removed)
         removedClass = removed['classID']
 
-        s = "DELETE FROM junction WHERE student='" + str(session['id']) + "' AND class=" + str(removedClass) + "'"
+        s = "DELETE FROM junction WHERE student='" + str(session['id']) + "' AND class='" + str(removedClass) + "'"
         result = junction_connection.execute(s)
         return("owo")
     if (request.method == 'ADD'):
-        print("L")
-        return("L")
+        junction_connection = junction_engine.connect()
+        
+        added = request.data
+        added = added.decode()
+        added = json.loads(added)
+        addedClass = added['classID']
+        addedGrade = added['grade']
+
+        s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(session['id']) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
+        result = junction_connection.execute(s)
+        return("owo")
 
 
 # This is where requests for data for a specific student is handled, you can only 'GET' from here

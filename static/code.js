@@ -63,6 +63,19 @@ async function fillTableCurrClasses() {
     // Creates variable table connected to "myTable" in the html
     var table = document.getElementById("myTable");
 
+    table.innerHTML = "";
+
+    var newRow = table.insertRow(table.length);
+    var cell1 = newRow.insertCell(table.length);
+    var cell2 = newRow.insertCell(table.length);
+    var cell3 = newRow.insertCell(table.length);
+    var cell4 = newRow.insertCell(table.length);
+
+    cell1.innerHTML = "Course";
+    cell2.innerHTML = "Time";
+    cell3.innerHTML = "Professor";
+    cell4.innerHTML = "Grade";
+
     // Cuts data to begin at the start of the relevant information
     data = data.substring(data.indexOf("'") + 1);
     // Loops through each class until the information is emptied
@@ -109,6 +122,7 @@ async function addClass(classID, grade) {
         body: JSON.stringify({classID, grade})});
     const data = await response.text();
 
+    fillTableCurrClasses();
 }
 
 async function dropClass(classID) {
@@ -121,4 +135,5 @@ async function dropClass(classID) {
         body: JSON.stringify({classID})});
     const data = await response.text();
 
+    fillTableCurrClasses();
 }
