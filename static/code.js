@@ -141,9 +141,11 @@ async function viewClass(classID) {
     var newRow = table.insertRow(table.length);
     var cell1 = newRow.insertCell(table.length);
     var cell2 = newRow.insertCell(table.length);
+    var cell3 = newRow.insertCell(table.length);
 
     cell1.innerHTML = "Student";
     cell2.innerHTML = "Grade";
+    cell3.innerHTML = "New Grade";
 
     // Cuts data to begin at the start of the relevant information
     data = data.substring(data.indexOf('"') + 1);
@@ -153,16 +155,22 @@ async function viewClass(classID) {
         var newRow = table.insertRow(table.length);
         var cell1 = newRow.insertCell(table.length);
         var cell2 = newRow.insertCell(table.length);
+        var cell3 = newRow.insertCell(table.length);
+        var cell4 = newRow.insertCell(table.length);
 
         var name = data.substring(0, data.indexOf('"'));
         data = data.substring(data.indexOf('"')+1);
         data = data.substring(data.indexOf('"')+1);
         var grade = data.substring(0, data.indexOf('"')) + "%";
         data = data.substring(data.indexOf('"')+1);
-        
+        data = data.substring(data.indexOf('"')+1);
+        var ID = data.substring(0, data.indexOf('"'));
+        data = data.substring(data.indexOf('"')+1);
 
         cell1.innerHTML = name;
         cell2.innerHTML = grade;
+        cell3.innerHTML = '<input id="' + ID + '" type="text"/>';
+        cell4.innerHTML = '<button onclick="changeGrade(' + ID + ', ' + classID + ')">Confirm</button>';
 
 
         if (data.indexOf('"') == -1) break;
@@ -170,6 +178,20 @@ async function viewClass(classID) {
         data = data.substring(data.indexOf('"') + 1);
     }
     document.getElementById("tablelabel").innerHTML = "Student Grades";
+}
+
+async function changeGrade(ID, classID) {
+    var grade = parseInt(document.getElementById(ID).value);
+    const response = await fetch('http://127.0.0.1:5000/student', {
+        method: 'CHANGEGRADE', 
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ID, classID, grade})});
+    const data = await response.text();
+
+    viewClass(classID);
 }
 
 async function fillTableAllClasses(elementID) {
@@ -185,13 +207,13 @@ async function fillTableAllClasses(elementID) {
     var cell2 = newRow.insertCell(table.length);
     var cell3 = newRow.insertCell(table.length);
     var cell4 = newRow.insertCell(table.length);
-    var cell4 = newRow.insertCell(table.length);
+    var cell5 = newRow.insertCell(table.length);
 
     cell1.innerHTML = "Course";
     cell2.innerHTML = "Professor";
     cell3.innerHTML = "Time";
     cell4.innerHTML = "Students Enrolled";
-    cell4.innerHTML = "Enrollment Status";
+    cell5.innerHTML = "Enrollment Status";
 
     // Cuts data to begin at the start of the relevant information
     data = data.substring(data.indexOf("(") + 1);

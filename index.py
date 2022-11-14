@@ -100,7 +100,7 @@ def classPull(classID):
                     s = "SELECT name FROM students WHERE id='" + key + "'"
                     result = students_connection.execute(s)
                     # Appends class data to finaljson
-                    finaljson += '"' + str(result.fetchone())[2:-3] + '": "'  + returnedjson[key] + '", '
+                    finaljson += '"' + str(result.fetchone())[2:-3] + '": "'  + returnedjson[key] + '": "' + key + '", '
             # Cleans up finaljson
             finaljson = finaljson[:-2] + "}"
 
@@ -116,7 +116,7 @@ def classPull(classID):
 
 # This is where requests to /student are handled, PASS is used to authenticate users, LOGOUT to log the user out, CLASSES to pull class information for the current user
 # and GET as what happens when you manually type the URL in.
-@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES', 'ALLCLASSES', 'GET', 'ADD', 'DROP', 'GETNAME', 'GETPERM'])
+@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES', 'ALLCLASSES', 'GET', 'ADD', 'DROP', 'GETNAME', 'GETPERM', 'CHANGEGRADE'])
 def studPassPull():
     if (request.method == 'PASS'):
         # Initializes connection to the students database
@@ -317,6 +317,26 @@ def studPassPull():
         return session['name']
     if (request.method == 'GETPERM'):
         return str(session['permission'])
+    if (request.method == 'CHANGEGRADE'):
+        # Takes in username and password from the log-in page and assigns them to addedU and addedP
+        changed = request.data
+        changed = changed.decode()
+        changed = json.loads(changed)
+        changedID = changed['ID']
+        changedClassID = changed['classID']
+        changedGrade = changed['grade']
+        print("Grade: " + str(changedGrade))
+
+        junction_connection = junction_engine.connect()
+
+        s = "DELETE FROM junction WHERE student='" + str(changedID) + "' AND class='" + str(changedClassID) + "'"
+        result = junction_connection.execute(s)
+
+        s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(changedID) + "', '" + str(changedClassID) + "', '" + str(changedGrade) + "')"
+        result = junction_connection.execute(s)
+        junction_connection.close()
+        return "success"
+
 
 
 # This is where requests for data for a specific student is handled, you can only 'GET' from here
