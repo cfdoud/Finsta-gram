@@ -1,8 +1,3 @@
-//Logging in/Session Management
-var username = 'null'
-var password = 'null'
-var studentName = 'null'
-
 // Hashing function, used to obfuscate passwords so they cannot be easily retreived from the database
 function hash(str) {
     // Custom seed/"Salt" for hash function
@@ -59,11 +54,8 @@ async function logOut() {
     location.href = "http://127.0.0.1:5000/";
 }
 
-async function initialize(table, type) {
-    if(type == "all") {fillTableAllClasses(table);}
-    else {
-        fillTableCurrClasses(table);
-    }
+async function initialize(table) {
+    fillTableCurrClasses(table);
     getName();
 }
 
@@ -75,10 +67,14 @@ async function fillTableCurrClasses(elementID) {
     const response = await fetch('http://127.0.0.1:5000/student', { method: 'CLASSES',});
     var data = await response.text();
 
+    const response2 = await fetch('http://127.0.0.1:5000/student', { method: 'GETPERM',});
+    var perm = await response2.text();
+    perm = parseInt(perm)
+
     // Creates variable table connected to "myTable" in the html
     var table = document.getElementById(elementID);
 
-    if (table != null) {table.innerHTML = "";}
+    table.innerHTML = "";
 
     var newRow = table.insertRow(table.length);
     var cell1 = newRow.insertCell(table.length);
@@ -92,7 +88,7 @@ async function fillTableCurrClasses(elementID) {
     cell4.innerHTML = "Students Enrolled";
 
     // Cuts data to begin at the start of the relevant information
-    data = data.substring(data.indexOf("'") + 1);
+    data = data.substring(data.indexOf("(") + 1);
     // Loops through each class until the information is emptied
     while(true) {
         // Creates a new row with the cells necessary, appending them to the current table
@@ -102,6 +98,8 @@ async function fillTableCurrClasses(elementID) {
         var cell3 = newRow.insertCell(table.length);
         var cell4 = newRow.insertCell(table.length);
 
+        var courseID = data.substring(0, data.indexOf(","));
+        data = data.substring(data.indexOf("'")+1);
         var courseName = data.substring(0, data.indexOf("'"));
         data = data.substring(data.indexOf(",")+2);
         var studCount = data.substring(0, data.indexOf(","));
@@ -114,8 +112,10 @@ async function fillTableCurrClasses(elementID) {
         data = data.substring(data.indexOf(":") + 3);
         var grade = data.substring(0, data.indexOf('"')) + "%";
 
-
-        cell1.innerHTML = courseName;
+        if (perm == 0) cell1.innerHTML = courseName;
+        else {
+            cell1.innerHTML = '<button onclick="viewClass(' + courseID + ')">' + courseName + '</button>';
+        }
         cell2.innerHTML = professor;
         cell3.innerHTML = time;
         cell4.innerHTML = studCount + "/" + studCapacity;
@@ -123,9 +123,53 @@ async function fillTableCurrClasses(elementID) {
 
         if (data.indexOf("(") == -1) break;
         // Tab to next relevant information
-        data = data.substring(data.indexOf("'") + 1);
+        data = data.substring(data.indexOf("(") + 1);
     }
     document.getElementById("tablelabel").innerHTML = "Your Classes";
+}
+
+async function viewClass(classID) {
+    const response = await fetch('http://127.0.0.1:5000/class/' + classID, { method: 'GET',});
+    var data = await response.text();
+
+    if (data == "fail") return;
+
+    var table = document.getElementById("myTable");
+
+    table.innerHTML = "";
+
+    var newRow = table.insertRow(table.length);
+    var cell1 = newRow.insertCell(table.length);
+    var cell2 = newRow.insertCell(table.length);
+
+    cell1.innerHTML = "Student";
+    cell2.innerHTML = "Grade";
+
+    // Cuts data to begin at the start of the relevant information
+    data = data.substring(data.indexOf('"') + 1);
+    // Loops through each class until the information is emptied
+    while(true) {
+        // Creates a new row with the cells necessary, appending them to the current table
+        var newRow = table.insertRow(table.length);
+        var cell1 = newRow.insertCell(table.length);
+        var cell2 = newRow.insertCell(table.length);
+
+        var name = data.substring(0, data.indexOf('"'));
+        data = data.substring(data.indexOf('"')+1);
+        data = data.substring(data.indexOf('"')+1);
+        var grade = data.substring(0, data.indexOf('"')) + "%";
+        data = data.substring(data.indexOf('"')+1);
+        
+
+        cell1.innerHTML = name;
+        cell2.innerHTML = grade;
+
+
+        if (data.indexOf('"') == -1) break;
+        // Tab to next relevant information
+        data = data.substring(data.indexOf('"') + 1);
+    }
+    document.getElementById("tablelabel").innerHTML = "Student Grades";
 }
 
 async function fillTableAllClasses(elementID) {
@@ -149,8 +193,6 @@ async function fillTableAllClasses(elementID) {
     cell4.innerHTML = "Students Enrolled";
     cell4.innerHTML = "Enrollment Status";
 
-
-    console.log(data);
     // Cuts data to begin at the start of the relevant information
     data = data.substring(data.indexOf("(") + 1);
     // Loops through each class until the information is emptied
@@ -189,7 +231,6 @@ async function fillTableAllClasses(elementID) {
         if (data.indexOf("(") == -1) break;
         // Tab to next relevant information
         data = data.substring(data.indexOf("(") + 1);
-        console.log(data);
     }
     document.getElementById("tablelabel").innerHTML = "All Classes";
 }
@@ -221,27 +262,9 @@ async function dropClass(studentID, classID, elementID) {
 }
 
 async function getName() {
-    console.log("Bruh");
     const response = await fetch('http://127.0.0.1:5000/student', { method: 'GETNAME',});
     var data = await response.text();
     console.log(data)
     document.getElementById("name").innerHTML = data;
     return data;
-}
-
-function openCatalog(evt, tabChange)  {
-    var i, tabcontent, tablinks;
-
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for(i = 0; i < tabcontent.length; i++)  {
-        tabcontent[i].style.display = "none";
-    }
-
-    tablinks = document.getElementsByClassName("tablinks");
-    for(i = 0; i < tablinks.length; i++)  {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    document.getElementById(tabChange).style.display = "block";
-    EventTarget.currentTarget.className += " active";
 }

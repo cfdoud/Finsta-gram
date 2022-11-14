@@ -1,6 +1,20 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<label>OwO Teacher</label>
-<button onclick="logOut()">Log Out</button>
+
+<h1>Welcome, Professor <label id="name">name</label></h1>
+<h2 class = "titleCenter">University</h2>
+<div class="tab">
+    <button class="tablinks" onclick="fillTableCurrClasses('myTable')">Your Classes</button>
+</div>
+<!--Content for the tabs-->
+<div id = "yourClasses">
+    <h3 id = "tablelabel">Your Classes</h3>
+    <p>
+    <body onload="javascript:initialize('myTable')">
+        <table id="myTable" class = "center"></table>
+        <button onclick="logOut()">Log Out</button>
+</body>
+    </p>
+</div>
 {% endblock %}

@@ -55,10 +55,68 @@ def home():
     session['user'] = "null"
     return render_template('index.html')
 
+@app.route('/class/<classID>', methods = ['GET'])
+def classPull(classID):
+    if (request.method == 'GET'):
+        if (session['permission'] > 0):
+            # Initializes connection to the junction database
+            junction_connection = junction_engine.connect()
+            # Pulls what classes the student is in from junction using their student id, assigns returned list to result
+            s = "SELECT * FROM junction WHERE class='" + str(classID) + "'"
+            result = junction_connection.execute(s)
+
+            # Creates string returnedjson to store classes student is in along with their grade
+            returnedjson = '{'
+            # Iterates through returned list using parameter row for each line
+            for row in result:
+                # Converts the row of data to a string
+                string = str(row)
+                print(string)
+                # Cuts out unnecessary portions of the data
+                string = string[string.index(',')+2:]
+                # Appends important part of data to returnedjson
+                returnedjson += '"' + string[:string.index(',')] + '": "'
+                string = string[string.index(',')+1:]
+                string = string[string.index(',')+2:]
+                returnedjson += string[:-1] + '", '
+            #Cleans up returnedjson
+            returnedjson = returnedjson[:-2] + "}"
+            print(returnedjson)
+            # Closes connection to the junction database
+            junction_connection.close() 
+
+            # Converts returnedjson into a python dictionary
+            returnedjson = json.loads(returnedjson)
+            # Connects to classes database
+            students_connection = students_engine.connect()
+
+            # Creates string finaljson to store all information of the classes the student is in
+            finaljson = '{'
+
+            # Iterates through returnedjson, such that key is the class id for each class the student is in
+            for key in returnedjson:
+                if (int(key) != int(session['id'])):
+                    # Pulls class data for the key/current class
+                    s = "SELECT name FROM students WHERE id='" + key + "'"
+                    result = students_connection.execute(s)
+                    # Appends class data to finaljson
+                    finaljson += '"' + str(result.fetchone())[2:-3] + '": "'  + returnedjson[key] + '", '
+            # Cleans up finaljson
+            finaljson = finaljson[:-2] + "}"
+
+            # Closes connection to classes database
+            students_connection.close()
+            print(finaljson)
+
+            # Return class information
+            return finaljson
+        return "fail"
+
+
 
 # This is where requests to /student are handled, PASS is used to authenticate users, LOGOUT to log the user out, CLASSES to pull class information for the current user
 # and GET as what happens when you manually type the URL in.
-@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES', 'ALLCLASSES', 'GET', 'ADD', 'DROP', 'GETNAME'])
+@app.route('/student', methods = ['PASS', 'LOGOUT', 'CLASSES', 'ALLCLASSES', 'GET', 'ADD', 'DROP', 'GETNAME', 'GETPERM'])
 def studPassPull():
     if (request.method == 'PASS'):
         # Initializes connection to the students database
@@ -256,9 +314,9 @@ def studPassPull():
         returnedString = returnedString[:-2] + "}"
         return returnedString
     if (request.method == 'GETNAME'):
-        print("test: " + str(session['name']))
         return session['name']
-        
+    if (request.method == 'GETPERM'):
+        return str(session['permission'])
 
 
 # This is where requests for data for a specific student is handled, you can only 'GET' from here
