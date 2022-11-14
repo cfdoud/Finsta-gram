@@ -208,7 +208,7 @@ def studPassPull():
 
 
 # This is where requests for data for a specific student is handled, you can only 'GET' from here
-@app.route('/student/<username>', methods = ['GET'])
+@app.route('/student/<username>', methods = ['GET', 'GETNAME'])
 def studPull(username):
     if (request.method == 'GET'):
         print("current user: " + session['user'])
@@ -220,6 +220,8 @@ def studPull(username):
             if (session['permission'] == 1): return render_template('teach.html')
             return render_template('stud.html')
         else: return redirect("http://127.0.0.1:5000/")
+    if (request.method == 'GETNAME'):
+        return (session['name'])
 
 # Start the app
 if __name__ == '__main__':
