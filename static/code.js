@@ -60,20 +60,20 @@ async function logOut() {
 }
 
 async function initialize() {
-    fillTableCurrClasses();
+    fillTableCurrClasses("myTable");
     getName();
 }
 
 // Table Fillers
 
 // This function is automatically called in pages where it is relevant, it fills a matching table ("myTable") with the class information for the current user
-async function fillTableCurrClasses() {
+async function fillTableCurrClasses(elementID) {
     // Calls CLASSES function in /student as seen in index.py, resultant information is saved in data
     const response = await fetch('http://127.0.0.1:5000/student', { method: 'CLASSES',});
     var data = await response.text();
 
     // Creates variable table connected to "myTable" in the html
-    var table = document.getElementById("myTable");
+    var table = document.getElementById(elementID);
 
     table.innerHTML = "";
 
@@ -124,11 +124,11 @@ async function fillTableCurrClasses() {
     }
 }
 
-async function fillTableAllClasses() {
+async function fillTableAllClasses(elementID) {
     const response = await fetch('http://127.0.0.1:5000/student', { method: 'ALLCLASSES',});
     var data = await response.text();
 
-    var table = document.getElementById("myTable");
+    var table = document.getElementById(elementID);
 
     table.innerHTML = "";
 
