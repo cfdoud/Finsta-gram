@@ -189,6 +189,7 @@ def studPassPull():
         removedClass = removed['classID']
         removedStud = removed['studentID']
 
+
         s = "SELECT studentCount FROM classes WHERE id='" + str(removedClass) + "'"
         result = classes_connection.execute(s)
         studCount = str(result.fetchone())[1:-2]
@@ -217,10 +218,17 @@ def studPassPull():
         addedGrade = added['grade']
         addedStud = added['studentID']
 
+        s = "SELECT capacity FROM classes WHERE id='" + str(addedClass) + "'"
+        result = classes_connection.execute(s)
+        capacity = str(result.fetchone())[1:-2]
+        capacity = int(capacity)
+
         s = "SELECT studentCount FROM classes WHERE id='" + str(addedClass) + "'"
         result = classes_connection.execute(s)
         studCount = str(result.fetchone())[1:-2]
-        studCount = int(studCount) + 1
+        studCount = int(studCount)
+        if (capacity <= studCount): return ("failure")
+        studCount = studCount + 1
 
         s = classes.update().where(classes.c.id == addedClass).values(studentCount = studCount)
         result = classes_connection.execute(s)
@@ -229,7 +237,7 @@ def studPassPull():
         else: s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(addedStud) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
         result = junction_connection.execute(s)
         junction_connection.close()
-        return("owo")
+        return("success")
     if (request.method == 'ALLCLASSES'):
         classes_connection = classes_engine.connect()
         junction_connection = junction_engine.connect()

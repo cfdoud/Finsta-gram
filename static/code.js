@@ -59,8 +59,11 @@ async function logOut() {
     location.href = "http://127.0.0.1:5000/";
 }
 
-async function initialize() {
-    fillTableCurrClasses("myTable");
+async function initialize(table, type) {
+    if(type == "all") {fillTableAllClasses(table);}
+    else {
+        fillTableCurrClasses(table);
+    }
     getName();
 }
 
@@ -75,7 +78,7 @@ async function fillTableCurrClasses(elementID) {
     // Creates variable table connected to "myTable" in the html
     var table = document.getElementById(elementID);
 
-    table.innerHTML = "";
+    if (table != null) {table.innerHTML = "";}
 
     var newRow = table.insertRow(table.length);
     var cell1 = newRow.insertCell(table.length);
@@ -122,6 +125,7 @@ async function fillTableCurrClasses(elementID) {
         // Tab to next relevant information
         data = data.substring(data.indexOf("'") + 1);
     }
+    document.getElementById("tablelabel").innerHTML = "Your Classes";
 }
 
 async function fillTableAllClasses(elementID) {
@@ -145,8 +149,10 @@ async function fillTableAllClasses(elementID) {
     cell4.innerHTML = "Students Enrolled";
     cell4.innerHTML = "Enrollment Status";
 
+
+    console.log(data);
     // Cuts data to begin at the start of the relevant information
-    data = data.substring(data.indexOf("'") + 1);
+    data = data.substring(data.indexOf("(") + 1);
     // Loops through each class until the information is emptied
     while(true) {
         // Creates a new row with the cells necessary, appending them to the current table
@@ -157,6 +163,8 @@ async function fillTableAllClasses(elementID) {
         var cell4 = newRow.insertCell(table.length);
         var cell5 = newRow.insertCell(table.length);
 
+        var courseID = data.substring(0, data.indexOf(","));
+        data = data.substring(data.indexOf("'")+1);
         var courseName = data.substring(0, data.indexOf("'"));
         data = data.substring(data.indexOf(",")+2);
         var studCount = data.substring(0, data.indexOf(","));
@@ -173,17 +181,20 @@ async function fillTableAllClasses(elementID) {
         cell1.innerHTML = courseName;
         cell2.innerHTML = professor;
         cell3.innerHTML = time;
-        cell4.innerHTML = studCount + "/" + studCapacity;
-        cell5.innerHTML = inClass;
+        cell4.innerHTML = studCount + "/" + studCapacity; 
+        if (inClass == "Enrolled") cell5.innerHTML = '<button onclick="dropClass(-1, ' + courseID + ', ' + "'myTable'" + ')">Drop</button>';
+        else cell5.innerHTML = '<button onclick="addClass(-1, ' + courseID + ', 0, ' + "'myTable'" + ')">Add</button>';
 
 
         if (data.indexOf("(") == -1) break;
         // Tab to next relevant information
-        data = data.substring(data.indexOf("'") + 1);
+        data = data.substring(data.indexOf("(") + 1);
+        console.log(data);
     }
+    document.getElementById("tablelabel").innerHTML = "All Classes";
 }
 
-async function addClass(studentID, classID, grade) {
+async function addClass(studentID, classID, grade, elementID) {
     const response = await fetch('http://127.0.0.1:5000/student', {
         method: 'ADD', 
         headers: {
@@ -193,10 +204,10 @@ async function addClass(studentID, classID, grade) {
         body: JSON.stringify({studentID, classID, grade})});
     const data = await response.text();
 
-    fillTableAllClasses();
+    fillTableAllClasses(elementID);
 }
 
-async function dropClass(studentID, classID) {
+async function dropClass(studentID, classID, elementID) {
     const response = await fetch('http://127.0.0.1:5000/student', {
         method: 'DROP', 
         headers: {
@@ -206,7 +217,7 @@ async function dropClass(studentID, classID) {
         body: JSON.stringify({studentID, classID})});
     const data = await response.text();
 
-    fillTableAllClasses();
+    fillTableAllClasses(elementID);
 }
 
 async function getName() {
@@ -217,23 +228,7 @@ async function getName() {
     document.getElementById("name").innerHTML = data;
     return data;
 }
-document.getElementById(evt, "name").innerHTML = getName();
 
-
-
-function openCatalog(evt, tabChange)  {
-    var i, tabcontent, tablinks;
-
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for(i = 0; i < tabcontent.length; i++)  {
-        tabcontent[i].style.display = "none";
-    }
-
-    tablinks = document.getElementsByClassName("tablinks");
-    for(i = 0; i < tablinks.length; i++)  {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
 
     document.getElementById(tabChange).style.display = "block";
     EventTarget.currentTarget.className += " active";
-}
