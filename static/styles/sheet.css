@@ -19,3 +19,27 @@ div {
     margin-right:auto;
     text-align: center;
 }
+.titleCenter {
+    color: black;
+    font-family: Arial;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+table, td {
+    border: 1px solid #ddd
+}
+th{
+    font-size: x-large;
+    background-color: #2596be;
+}
+tr:nth-child(even)  {
+    background-color: #d0d4ec
+
+}
