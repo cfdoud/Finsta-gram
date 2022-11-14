@@ -112,27 +112,27 @@ async function fillTableCurrClasses() {
     }
 }
 
-async function addClass(classID, grade) {
+async function addClass(studentID, classID, grade) {
     const response = await fetch('http://127.0.0.1:5000/student', {
         method: 'ADD', 
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({classID, grade})});
+        body: JSON.stringify({studentID, classID, grade})});
     const data = await response.text();
 
     fillTableCurrClasses();
 }
 
-async function dropClass(classID) {
+async function dropClass(studentID, classID) {
     const response = await fetch('http://127.0.0.1:5000/student', {
         method: 'DROP', 
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({classID})});
+        body: JSON.stringify({studentID, classID})});
     const data = await response.text();
 
     fillTableCurrClasses();

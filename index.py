@@ -186,8 +186,9 @@ def studPassPull():
         removed = removed.decode()
         removed = json.loads(removed)
         removedClass = removed['classID']
-
-        s = "DELETE FROM junction WHERE student='" + str(session['id']) + "' AND class='" + str(removedClass) + "'"
+        removedStud = removed['studentID']
+        if (removedStud == -1): s = "DELETE FROM junction WHERE student='" + str(session['id']) + "' AND class='" + str(removedClass) + "'"
+        else: s = "DELETE FROM junction WHERE student='" + str(removedStud) + "' AND class='" + str(removedClass) + "'"
         result = junction_connection.execute(s)
         return("owo")
     if (request.method == 'ADD'):
@@ -198,8 +199,10 @@ def studPassPull():
         added = json.loads(added)
         addedClass = added['classID']
         addedGrade = added['grade']
+        addedStud = added['studentID']
 
-        s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(session['id']) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
+        if (addedStud == -1): s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(session['id']) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
+        else: s = "INSERT INTO junction (student, class, grade) VALUES ('" + str(addedStud) + "', '" + str(addedClass) + "', '" + str(addedGrade) + "')"
         result = junction_connection.execute(s)
         return("owo")
 
