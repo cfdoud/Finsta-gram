@@ -6,6 +6,7 @@
 <h2 class = "titleCenter">Isn'tGram</h2>
 <div class="tab">
     <button class="tablinks" onclick="openBio()">Bio</button>
+    <button class="tablinks" onclick="openMessages()">Messages</button>
     <button class="tablinks" onclick="fillTableAllClasses('myTable')">Following</button>
     <button class="tablinks" onclick="refreshPosts('myTable')">Refresh</button>
     <button class="logout" onclick="logOut()">Log Out</button>
@@ -15,9 +16,10 @@
     <h3 id = "tablelabel">Your Feed</h3>
     <p>
     <body onload="javascript:initialize('myTable')">
+        <img width="727" height="420" src="{{ url_for('static',filename='images/1/fnafmovie.png') }}" alt="Tartaglia">
         <table id="myTable" class = "center"></table>
         
-</body>
+    </body>
     </p>
 </div>
 {% endblock %}

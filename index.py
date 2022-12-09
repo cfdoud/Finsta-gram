@@ -46,7 +46,7 @@ posts = Table(
    Column('image', String))
 
 messages = Table(
-   'messages', posts_meta, 
+   'messages', messages_meta, 
    Column('id', Integer, primary_key = True), 
    Column('user', Integer), 
    Column('recipient', Integer),
