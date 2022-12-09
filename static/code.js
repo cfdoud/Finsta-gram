@@ -26,7 +26,7 @@ async function readLogin() {
     password = hash(password);
     
     // Calls the PASS function in /student as seen in index.py, assigns reply to variable data
-    const response = await fetch('http://127.0.0.1:5000/student', {
+    const response = await fetch('http://127.0.0.1:5000/userdata', {
         method: 'PASS', 
         headers: {
             'Accept': 'application/json',
@@ -43,7 +43,7 @@ async function readLogin() {
     // If the log-in was successful, the message will begin with 'S' and you will be redirected to the page for your user (rest seen in /student/username in index.py)
     if (data.charAt(0) == 'S') {
         studentName = data.substring(data.indexOf("Hello")+1, data.indexOf("!")) 
-        location.href = "student/" + username;
+        location.href = "userdata/" + username;
     }
 }
 
