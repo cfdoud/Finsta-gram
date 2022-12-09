@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<h1>Welcome, <label id="name">name</label></h1>
+<h2 class = "titleCenter">Isn'tGram</h2>
+<div class="tab">
+    <button class="tablinks" onclick="openBio()">Bio</button>
+    <button class="tablinks" onclick="fillTableAllClasses('myTable')">Following</button>
+    <button class="tablinks" onclick="refreshPosts('myTable')">Refresh</button>
+    <button class="logout" onclick="logOut()">Log Out</button>
+</div>
+<!--Content for the tabs-->
+<div id = "yourClasses">
+    <h3 id = "tablelabel">Your Feed</h3>
+    <p>
+    <body onload="javascript:initialize('myTable')">
+        <table id="myTable" class = "center"></table>
+        
+</body>
+    </p>
+</div>
+{% endblock %}

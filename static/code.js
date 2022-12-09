@@ -284,7 +284,7 @@ async function dropClass(studentID, classID, elementID) {
 }
 
 async function getName() {
-    const response = await fetch('http://127.0.0.1:5000/student', { method: 'GETNAME',});
+    const response = await fetch('http://127.0.0.1:5000/userdata', { method: 'GETNAME',});
     var data = await response.text();
     console.log(data)
     document.getElementById("name").innerHTML = data;

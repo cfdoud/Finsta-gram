@@ -29,6 +29,7 @@ userdata = Table(
    Column('email', String), 
    Column('username', String), 
    Column('password', Integer),
+   Column('bio', String),
    Column('profilePicture', String))
 
 followingTable = Table(
@@ -64,7 +65,7 @@ messages_meta.create_all(messages_engine)
 @app.route('/')
 def home():
     # Sets the current user to be null, displays login page
-    session['user'] = "null"
+    session['username'] = "null"
     return render_template('index.html')
 
 
@@ -108,21 +109,32 @@ def studPassPull():
             s = "SELECT name FROM userdata WHERE username='" + addedU + "'"
             result = userdata_connection.execute(s)
             name = str(result.fetchone())
-            # Finds the permission value of the user and assigns it to permission
-            s = "SELECT permission FROM userdata WHERE username='" + addedU + "'"
+            # Finds the profilePicture of the user and assigns it to profilePicture
+            s = "SELECT profilePicture FROM userdata WHERE username='" + addedU + "'"
             result = userdata_connection.execute(s)
-            permission = str(result.fetchone())
-            # Finds the student id of the user and assigns it to id
+            profilePicture = str(result.fetchone())
+            # Finds the id of the user and assigns it to id
             s = "SELECT id FROM userdata WHERE username='" + addedU + "'"
             result = userdata_connection.execute(s)
             id = str(result.fetchone())
+            # Finds the email of the user and assigns it to email
+            s = "SELECT id FROM userdata WHERE username='" + addedU + "'"
+            result = userdata_connection.execute(s)
+            email = str(result.fetchone())
+            # Finds the email of the user and assigns it to email
+            s = "SELECT bio FROM userdata WHERE username='" + addedU + "'"
+            result = userdata_connection.execute(s)
+            bio = str(result.fetchone())
             # Closes connection to student database
             userdata_connection.close()
             # Saves the student's name, id, username, and permission value into the session
-            session['user'] = addedU
+            session['username'] = addedU
             session['name'] = name[2:-3]
-            session['permission'] = int(permission[1:-2])
+            session['email'] = email[2:-3]
+            session['bio'] = bio[2:-3]
+            session['profilePicture'] = profilePicture[2:-3]
             session['id'] = int(id[1: -2])
+
 
             # Returns success message to the page
             return "Successfully logged in; Hello " + session['name'] + "!"
@@ -291,6 +303,18 @@ def studPassPull():
         junction_connection.close()
         return "success"
 
+# This is where requests for data for a specific student is handled, you can only 'GET' from here
+@app.route('/userdata/<calledusername>', methods = ['GET'])
+def studPull(calledusername):
+    if (request.method == 'GET'):
+        print("current user: " + session['username'])
+        print("attempted user: " + calledusername)
+        # If the accessed user is the one currently logged in, redirect to their page, else redirect to the log-in page
+        if (session['username'] == calledusername):
+            print("User: " + str(session['username']))
+            return render_template('posts.html')
+        else: return redirect("http://127.0.0.1:5000/")
+
 """
 
 @app.route('/class/<classID>', methods = ['GET'])
@@ -349,23 +373,6 @@ def classPull(classID):
             # Return class information
             return finaljson
         return "fail"
-
-
-
-
-# This is where requests for data for a specific student is handled, you can only 'GET' from here
-@app.route('/student/<username>', methods = ['GET'])
-def studPull(username):
-    if (request.method == 'GET'):
-        print("current user: " + session['user'])
-        print("attempted user: " + username)
-        # If the accessed user is the one currently logged in, redirect to their page, else redirect to the log-in page
-        if (session['user'] == username):
-            print("Permission: " + str(session['permission']))
-            if (session['permission'] == 2): return render_template('adm.html')
-            if (session['permission'] == 1): return render_template('teach.html')
-            return render_template('stud.html')
-        else: return redirect("http://127.0.0.1:5000/")
 
 """
 
