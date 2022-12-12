@@ -2,7 +2,7 @@
 
 {% block content %}
 <html> 
-<body style="background-color: #0c0f1d;">
+<body style="background-color: #0c0f1d;" onload="javascript:initialize('myTable')">
 <head>  
     <style>
      body    {
@@ -11,7 +11,7 @@
         color: #0c0f1d;
     }
      .banner {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(146, 131, 131, 0.5)) ,url('../static//images/userdata/banners/kirb.jpg');
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(146, 131, 131, 0.5)) ,url('../static/images/userdata/banners/kirb.jpg');
         width: 100%;
     }
      .banner-text    {
@@ -27,7 +27,7 @@
            <h2 class = "titleCenter">Isn'tGram</h2>
             
         </div>
-        <h1> <img src="../static/images/userdata/profile/john.jpg" alt="avatar1" class="avatar">Welcome, <label id="name">what</label></h1>
+        <h1> <img src="../static/images/userdata/profile/john.jpg" alt="avatar1" class="avatar"></img>Welcome, <label id="name">what</label></h1>
         <h3 class="bio"> My bio for my page</h1>
     </div>
         
@@ -37,7 +37,7 @@
     <button class="tablinks" onclick="openBio()">Bio</button>
     <button class="tablinks" onclick="openMessages()">Messages</button>
     <button class="tablinks" onclick="fillTableAllClasses('myTable')">Following</button>
-    <button class="tablinks" onclick="refreshPosts('myTable')">Refresh</button>
+    <button class="tablinks" onclick="initialize('myTable')">Refresh</button>
     <button class="logout" onclick="logOut()">Log Out</button>
 </div>
 
