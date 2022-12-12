@@ -3,7 +3,9 @@ button {
     margin-left:auto;
     margin-right:auto;
     text-align: center;
-    background: gainsboro;
+    background: rgba(0, 0, 0, 0.221);
+    font-size: 25px;
+    color: azure;
 }
 .center_label {
     padding:5px;
@@ -20,18 +22,28 @@ div {
     text-align: center;
 }
 .titleCenter {
-    color: black;
     font-family: Arial;
-    margin-left: auto;
-    margin-right: auto;
-
+    text-align: left;
+    vertical-align: text-top;
+    font-size: 22px;
+    color: rgb(255, 255, 255);
+    vertical-align: text-top;
 }
 h1{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-right: 65%;
+    margin-top: 5px;
     text-align: center;
     color: black;
+    font-size: 25.1px;
+    
 }
-h2 {
+
+.bio {
+    margin-right: 63%;
     text-align: center;
+    color: rgb(20, 255, 255);
+    font-size: 20px;
 }
 div {
     text-align: center;
@@ -44,11 +56,11 @@ div {
 }
 
 table, td {
-    border: 1px solid #ddd
+    border: 1px solid rgb(11, 11, 11)
 }
 th{
     font-size: x-large;
-    background-color: #2596be;
+    background-color: #22dcdf;
 }
 tr:nth-child(even)  {
     background-color: #d0d4ec
@@ -56,8 +68,8 @@ tr:nth-child(even)  {
 }
 .tab {
     overflow: hidden;
-    border: 1px solid blue;
-    background-color: #2596be;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: #1b1d2a;
 }
 .tab button {
     background-color: inherit;
@@ -65,11 +77,11 @@ tr:nth-child(even)  {
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 14px;
+    padding: 20px 20px;
     transition: 0.3s;
 }
 .tab button:hover {
-    background-color: #ddd;
+    background-color: rgb(11, 11, 11);
 }
 .tab button.active {
     background-color: #ccc;
@@ -80,3 +92,32 @@ tr:nth-child(even)  {
     border: 1px solid rgb(215, 19, 19);
     border-top: none;
 } 
+.avatar {
+
+    vertical-align: text-bottom;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.row:after {
+    content: "";
+    display:table;
+    clear: both;
+}
+.centerColumn {
+    float: center;
+    width: 40%;
+}
+.card   {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+}
+.fakeimg    {
+    background-color: #aaa;
+    width: 50%;
+    padding: 20px;  
+}
+.user   {
+    float: left;
+}

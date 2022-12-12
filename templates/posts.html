@@ -1,9 +1,38 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<html> 
+<body style="background-color: #0c0f1d;">
+<head>  
+    <style>
+     body    {
+        margin: 0;
+        padding: 0;
+        color: #0c0f1d;
+    }
+     .banner {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(146, 131, 131, 0.5)) ,url('../static//images/userdata/banners/kirb.jpg');
+        width: 100%;
+    }
+     .banner-text    {
+        position: center;
+    }
+    </style>
+    </head>
 
-<h1>Welcome, <label id="name">name</label></h1>
-<h2 class = "titleCenter">Isn'tGram</h2>
+
+    <div class ="banner">
+        <div class ="banner-text">
+           <!-- <img class ="banner", src="{{ url_for('static',filename='images/userdata/banners/kirb.jpg') }}"> -->
+           <h2 class = "titleCenter">Isn'tGram</h2>
+            
+        </div>
+        <h1> <img src="../static/images/userdata/profile/john.jpg" alt="avatar1" class="avatar">Welcome, <label id="name">what</label></h1>
+        <h3 class="bio"> My bio for my page</h1>
+    </div>
+        
+        
+
 <div class="tab">
     <button class="tablinks" onclick="openBio()">Bio</button>
     <button class="tablinks" onclick="openMessages()">Messages</button>
@@ -11,8 +40,20 @@
     <button class="tablinks" onclick="refreshPosts('myTable')">Refresh</button>
     <button class="logout" onclick="logOut()">Log Out</button>
 </div>
+
+
+<div class="row">
+    <div class="centerColumn">
+        <div class="card">
+            <h4 class="user"> </h4>
+            <h5>Description</h5>
+            <div class= "fakeimg" style="height: 200px;">Image</div>
+            
+        </div>
+    </div>
+</div>
 <!--Content for the tabs-->
-<div id = "yourClasses">
+<!-- <div id = "yourClasses">
     <h3 id = "tablelabel">Your Feed</h3>
     <p>
     <body onload="javascript:initialize('myTable')">
@@ -22,4 +63,7 @@
     </body>
     </p>
 </div>
+-->
+</body>
+</html>
 {% endblock %}
