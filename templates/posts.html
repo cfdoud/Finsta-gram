@@ -2,7 +2,7 @@
 
 {% block content %}
 <html> 
-<body style="background-color: #0c0f1d;" onload="javascript:initialize('myTable')">
+<body style="background-color: #0c0f1d;", onload="javascript:initialize('myTable')">
 <head>  
     <style>
      body    {
@@ -28,7 +28,7 @@
             
         </div>
         <h1> <img src="../static/images/userdata/profile/john.jpg" alt="avatar1" class="avatar"></img>Welcome, <label id="name">what</label></h1>
-        <h3 class="bio"> My bio for my page</h1>
+        <h3 class="bio"> My bio for my page </h3>
     </div>
         
         
@@ -45,10 +45,10 @@
 <div class="row">
     <div class="centerColumn">
         <div class="card">
-            <h4 class="user"> </h4>
-            <h5>Description</h5>
-            <div class= "fakeimg" style="height: 200px;">Image</div>
-            
+            <h4 class="user"><img class="avatar1" src="../static/images/userdata/profile/john.jpg"></img><label id="name"> name </label></h4>
+            <h5 class="imgDescrip">"The bite of '87" with my kid! </h5>
+            <!-- <div class= "fakeimg" style="height: 200px;">Image</div> -->
+            <table id="myTable" class = "fakeimg" style="height: 200px;"><img width="727" height="420" src="{{ url_for('static',filename='images/userdata/1/fnafmovie.png') }}" alt="Tartaglia"> </img> </table>    
         </div>
     </div>
 </div>

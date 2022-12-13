@@ -49,10 +49,14 @@ div {
     text-align: center;
 }
 .center {
-    margin-left: auto;
+    /*margin-left: auto;
     margin-right: auto;
     margin-top: auto;
     margin-bottom: auto;
+    */
+    margin: auto;
+    width: 50%;
+    padding: 10px;
 }
 
 table, td {
@@ -82,6 +86,7 @@ tr:nth-child(even)  {
 }
 .tab button:hover {
     background-color: rgb(11, 11, 11);
+    
 }
 .tab button.active {
     background-color: #ccc;
@@ -100,19 +105,28 @@ tr:nth-child(even)  {
     padding: 10px;
     border-radius: 50%;
 }
+.avatar1 {
+
+    vertical-align: text-bottom;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
 .row:after {
     content: "";
     display:table;
     clear: both;
 }
 .centerColumn {
+    
     float: center;
     width: 40%;
 }
 .card   {
-    background-color: white;
+    border-radius: 5%;
+    background-color: #1b1d2a;
     padding: 20px;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 .fakeimg    {
     background-color: #aaa;
@@ -120,5 +134,40 @@ tr:nth-child(even)  {
     padding: 20px;  
 }
 .user   {
+    font-size: 18px;
     float: left;
+    color: azure;
+}
+.imgDescrip   {
+    
+    font-size: 15px;
+    vertical-align: text-bottom;
+    float: left;
+    color: #657ef8;
+}
+.rounded {
+	border: 1px solid rgb(103, 6, 248);
+    padding: 20px;
+	border-radius: 8px;
+}
+
+.centerCard  {
+padding-top: 10%;
+}
+.infoCard    {
+    float: center;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border-radius: 5%;
+    box-shadow: 0 4px 8px 0 rgba(196, 83, 237, 0.999);
+    max-width: 400px;
+    /*text-align: center;*/
+    font-family: arial;
+}
+.loginCard{
+    text-align: bottom;
+    max-width: 400px;
+    border-color: blueviolet;
+    background-color: rgb(28, 0, 99);
+    border-radius: 25%;
 }
